@@ -179,18 +179,18 @@ void request_parser::parse_referer(const std::string& referer_data)
 
 void request_parser::parse_date_rfc_1123(const std::vector<std::string>& parts)
 {
-    auto wkday = parts[0];
-    int day = std::stoi(parts[1], 0, 10);
+    const auto& wkday = parts[0];
+    const int day = std::stoi(parts[1], 0, 10);
     if(day < 0 || day > 31)
     {
         m_error = 1;
-        m_error_text = "If-Modified-Since day field not correct.";
+        m_error_text = "If-Modified-Since day field not correct. Day: " + std::to_string(day);
 
         return;
     }
 
     int month = -1;
-    auto month_text = parts[2];
+    const auto& month_text = parts[2];
     if(month_text == "Jan")
     {
         month = 0;
@@ -243,13 +243,13 @@ void request_parser::parse_date_rfc_1123(const std::vector<std::string>& parts)
     if(month == -1)
     {
         m_error = 1;
-        m_error_text = "If-Modified-Since month field not correct.";
+        m_error_text = "If-Modified-Since month field not correct. Month: " + month_text;
 
         return;
     }
 
-    int year = std::stoi(parts[3], 0, 10);
-    std::string year_test = std::to_string(year);
+    const int year = std::stoi(parts[3], 0, 10);
+    const std::string year_test = std::to_string(year);
     if(parts[3] != year_test)
     {
         m_error = 1;
@@ -266,12 +266,12 @@ void request_parser::parse_date_rfc_1123(const std::vector<std::string>& parts)
         return;
     }
 
-    auto time_text = parts[4];
+    const auto& time_text = parts[4];
     int hours = 0;
     int minutes = 0;
     int seconds = 0;
 
-    int scan_result = sscanf(time_text.c_str(), "%2d:%2d:%2d", &hours, &minutes, &seconds);
+    const int scan_result = sscanf(time_text.c_str(), "%2d:%2d:%2d", &hours, &minutes, &seconds);
     if(scan_result != 3)
     {
         m_error = 1;
@@ -296,7 +296,7 @@ void request_parser::parse_date_rfc_1123(const std::vector<std::string>& parts)
         m_error_text = "If-Modified-Since seconds field not correct.";
     }
 
-    auto gmt = parts[5];
+    const auto& gmt = parts[5];
     if(gmt != "GMT")
     {
         m_error = 1;
@@ -311,7 +311,7 @@ void request_parser::parse_date_rfc_1123(const std::vector<std::string>& parts)
     time_object->tm_mon = month;
     time_object->tm_year = year - 1900;
 
-    time_t result = timegm(time_object);
+    const time_t result = timegm(time_object);
     if(result == -1)
     {
         m_error = 1;
