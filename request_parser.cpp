@@ -63,7 +63,7 @@ request_parser::request_parser(const int id, const std::string& r)
 
         if(line_type == "If-Modified-Since")
         {
-            parse_if_modified_since(line_data);
+            //parse_if_modified_since(line_data);
 
             continue;
         }
@@ -389,7 +389,7 @@ void request_parser::parse_date_asctime(const std::vector<std::string>& parts)
     if(month == -1)
     {
         m_error = 1;
-        m_error_text = "If-Modified-Since month field not correct.";
+        m_error_text = "If-Modified-Since month field not correct. Month: " + month_text;
 
         return;
     }
