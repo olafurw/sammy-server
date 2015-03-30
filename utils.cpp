@@ -4,39 +4,6 @@
 
 namespace utils
 {
-
-std::map<std::string, std::string> generate_mimetype_map()
-{
-    std::map<std::string, std::string> m;
-    m["jpg"] = "image/jpeg";
-    m["png"] = "image/png";
-    m["gif"] = "image/gif";
-    m["css"] = "text/css";
-    m["js"] = "application/javascript";
-    m["htm"] = "text/html";
-    m["html"] = "text/html";
-    
-    return m;
-}
-
-std::string filename_to_mimetype(const std::string& filename)
-{
-    static std::map<std::string, std::string> mimemap = generate_mimetype_map();
-
-    const auto found = filename.find_last_of('.');
-    if(found >= filename.size())
-    {
-        return "text/plain";
-    }
-    
-    const std::string extension = filename.substr(found + 1);
-    if(mimemap.count(extension) == 0)
-    {
-        return "text/plain";
-    }
-    
-    return mimemap[extension];
-}
     
 std::string sha256(const std::string& data)
 {

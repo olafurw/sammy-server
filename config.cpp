@@ -17,10 +17,6 @@ config_storage::config_storage(const std::string& config_file)
         {
             c.type = type_static;
         }
-        else if(line[3] == "STATIC_FOLDER")
-        {
-            c.type = type_static_folder;
-        }
         
         c.method = method_unknown;
         if(line[0] == "GET")
@@ -31,6 +27,8 @@ config_storage::config_storage(const std::string& config_file)
         {
             c.method = method_post;
         }
+        
+        c.mimetype = line[4];
         
         m_routes[line[1]] = c;
     }
@@ -46,25 +44,4 @@ bool config_storage::get(const std::string& key, config& cfg) const
     cfg = m_routes.at(key);
     
     return true;
-}
-
-bool config_storage::get_folder(const std::string& key, config& cfg) const
-{
-    for(const auto& entry : m_routes)
-    {
-        const config& entry_cfg = entry.second;
-        
-        if(entry_cfg.type != type_static_folder)
-        {
-            continue;
-        }
-        
-        if(utils::starts_with(entry_cfg.path, key))
-        {
-            cfg = entry_cfg;
-            return true;
-        }
-    }
-    
-    return false;
 }

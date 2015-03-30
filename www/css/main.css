@@ -1,0 +1,50 @@
+body {
+    background-color: #C1C2BD;
+}
+
+div#content {
+   width: 960px;
+   margin-left: auto;
+   margin-right: auto;
+   padding-top: 20px;
+   padding-left: 10px;
+   padding-right: 10px;
+   padding-bottom: 20px;
+   background-color: #FFFFFF;
+   border-right: 1px solid #000000;
+   border-left: 1px solid #000000;
+   border-bottom: 1px solid #000000;
+}
+
+div#title {
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #000000;
+}
+
+div#title a {
+    color: #000000;
+    text-decoration: none;
+}
+
+div#footer {
+    font-size: 12px;
+    margin-top: 15px;
+}
+
+div.blog {
+    padding-top: 15px;
+    border-bottom: 1px solid #000000;   
+}
+
+div.blog p {
+    line-height: 20px;
+    padding-bottom: 15px;
+}
+
+div.blog h1 {
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 10px;
+}

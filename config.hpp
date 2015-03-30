@@ -28,6 +28,7 @@ public:
     std::string path;
     std::string location;
     route_type type;
+    std::string mimetype;
 };
 
 class config_storage
@@ -36,7 +37,6 @@ public:
     config_storage(const std::string& config_file);
     
     bool get(const std::string& key, config& cfg) const;
-    bool get_folder(const std::string& key, config& cfg) const;
     
 private:
     std::map<std::string, config> m_routes;

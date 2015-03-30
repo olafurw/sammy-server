@@ -20,8 +20,6 @@
 
 namespace utils
 {
-    std::string filename_to_mimetype(const std::string& filename);
-    
     std::string sha256(const std::string& data);
 
     // Trimming
