@@ -14,9 +14,11 @@ public:
     void process(const request_parser& rp, const config_storage& cfg, std::string& data);
     
 private:
-    bool process_config(const request_parser& rp, const config& cfg, std::string& out_file_path);
+    bool process_static(const request_parser& rp, const config& cfg, std::string& data);
+    bool process_json(const request_parser& rp, const config& cfg, std::string& data);
     std::string response_error();
     std::string response_200(const std::string& input, const std::string& content_type);
+    std::string response_200_head(const int input_size, const std::string& content_type);
 };
 
 #endif

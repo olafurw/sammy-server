@@ -11,6 +11,7 @@ set(SERVER_FILES
     utils.cpp
     sha256.cpp
     config.cpp
+    database.cpp
     listener.cpp
     router.cpp
     request_parser.cpp

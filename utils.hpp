@@ -41,6 +41,7 @@ namespace utils
     // File to string
     // http://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html
     std::string file_to_string(const std::string& filename);
+    std::size_t file_size(const std::string& filename);
 
     std::vector<std::string> file_to_array(const std::string& filename, char token = '\n');
     void write_to_file(const std::string& filename, const std::string& content);

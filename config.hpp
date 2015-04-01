@@ -11,7 +11,7 @@ enum route_type
 {
     type_unknown,
     type_static,
-    type_static_folder,
+    type_json,
 };
 
 enum route_method

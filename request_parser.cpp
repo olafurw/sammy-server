@@ -7,7 +7,8 @@ request_parser::request_parser(const int id, const std::string& r)
     m_error = 0;
     m_error_text = "";
 
-    m_method = "";
+    m_method = route_method::method_unknown;
+    m_is_data_requested = false;
     m_path = "";
     m_host = "";
     m_identifier = "";
@@ -71,7 +72,9 @@ request_parser::request_parser(const int id, const std::string& r)
 
     parse_post_data();
 
-    if(m_method.size() == 0 || m_path.size() == 0 || m_host.size() == 0)
+    if(m_method == route_method::method_unknown 
+       || m_path.size() == 0 
+       || m_host.size() == 0)
     {
         m_error = 1;
         m_error_text = "Method, path or host empty.";
@@ -91,9 +94,19 @@ void request_parser::parse_header()
 
     std::string& method = first_line.at(0);
 
-    if(method == "GET" || method == "POST")
+    if(method == "GET")
     {
-        m_method = method;
+        m_method = route_method::method_get;
+        m_is_data_requested = true;
+    }
+    else if(method == "HEAD")
+    {
+        m_method = route_method::method_get;
+    }
+    else if(method == "POST")
+    {
+        m_method = route_method::method_post;
+        m_is_data_requested = true;
     }
 
     m_path = utils::trim(first_line.at(1));
@@ -148,7 +161,7 @@ void request_parser::parse_cookies(const std::string& cookie_data)
 
 void request_parser::parse_post_data()
 {
-    if(m_method != "POST")
+    if(m_method != route_method::method_post)
     {
         return;
     }
@@ -504,9 +517,14 @@ std::string request_parser::get_path() const
     return m_path;
 }
 
-std::string request_parser::get_method() const
+route_method request_parser::get_method() const
 {
     return m_method;
+}
+
+bool request_parser::is_data_requested() const
+{
+    return m_is_data_requested;
 }
 
 std::string request_parser::get_post_data() const

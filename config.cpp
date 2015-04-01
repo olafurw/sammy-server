@@ -17,6 +17,10 @@ config_storage::config_storage(const std::string& config_file)
         {
             c.type = type_static;
         }
+        else if(line[3] == "JSON")
+        {
+            c.type = type_json;
+        }
         
         c.method = method_unknown;
         if(line[0] == "GET")

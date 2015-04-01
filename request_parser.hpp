@@ -6,6 +6,8 @@
 #include <memory>
 #include <map>
 
+#include "config.hpp"
+
 class request_parser
 {
 public:
@@ -13,7 +15,8 @@ public:
 
     std::string get_host() const;
     std::string get_path() const;
-    std::string get_method() const;
+    route_method get_method() const;
+    bool is_data_requested() const;
     std::string get_identifier() const;
     std::string get_post_data() const;
     std::string get_referer() const;
@@ -36,7 +39,8 @@ private:
 
     void parse_if_modified_since(const std::string& modified_date);
 
-    std::string m_method;
+    route_method m_method;
+    bool m_is_data_requested;
     std::string m_path;
     std::string m_host;
     std::string m_identifier;

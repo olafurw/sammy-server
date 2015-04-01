@@ -115,6 +115,19 @@ std::string file_to_string(const std::string& filename)
     return content;
 }
 
+std::size_t file_size(const std::string& filename)
+{
+    std::ifstream in(filename, std::ios::in | std::ios::binary);
+
+    std::string content;
+
+    in.seekg(0, std::ios::end);
+    content.resize(in.tellg());
+    in.close();
+
+    return content.size();
+}
+
 std::vector<std::string> file_to_array(const std::string& filename, char token)
 {
     return split_string(file_to_string(filename), token);
