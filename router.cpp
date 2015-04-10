@@ -7,6 +7,7 @@
 #include <string>
 #include <unistd.h>
 
+#include "cache_storage.hpp"
 #include "config.hpp"
 #include "request_parser.hpp"
 #include "data_handler.hpp"
@@ -25,7 +26,8 @@ std::vector<work_data> work;
 std::mutex mtx;
 std::condition_variable cv;
 bool has_data = false;
-config_storage cfg("/home/cznp-server/config.cfg");
+cache_storage cache;
+config_storage cfg("/home/cznp-server/config.cfg", cache);
 
 void on_data(const int sck, const std::string& data)
 {
@@ -58,8 +60,6 @@ void run()
         
         for(auto wrk : current_work)
         {
-            std::cout << wrk.data << std::endl;
-            
             request_id++;
             request_parser rp{request_id, wrk.data};
             if(rp.errors())
@@ -72,7 +72,7 @@ void run()
             std::string data;
             
             data_handler dh;
-            dh.process(rp, cfg, data);
+            dh.process(rp, cfg, cache, data);
 
             write(wrk.sck, data.c_str(), data.size());
             close(wrk.sck);

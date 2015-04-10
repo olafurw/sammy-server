@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 
-#include "utils.hpp"
+#include "cache_storage.hpp"
 
 enum route_type
 {
@@ -21,6 +21,12 @@ enum route_method
     method_post,
 };
 
+enum cache_method
+{
+    cache_never,
+    cache_static,
+};
+
 class config
 {
 public:
@@ -28,13 +34,14 @@ public:
     std::string path;
     std::string location;
     route_type type;
+    cache_method cache;
     std::string mimetype;
 };
 
 class config_storage
 {
 public:
-    config_storage(const std::string& config_file);
+    config_storage(const std::string& config_file, cache_storage& cache);
     
     bool get(const std::string& key, config& cfg) const;
     

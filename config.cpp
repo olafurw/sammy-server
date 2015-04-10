@@ -1,6 +1,8 @@
 #include "config.hpp"
 
-config_storage::config_storage(const std::string& config_file)
+#include "utils.hpp"
+
+config_storage::config_storage(const std::string& config_file, cache_storage& cache)
 {
     const auto lines = utils::file_to_array(config_file);
     
@@ -33,6 +35,19 @@ config_storage::config_storage(const std::string& config_file)
         }
         
         c.mimetype = line[4];
+        
+        c.cache = cache_never;
+        if(line[5] == "CACHE-STATIC")
+        {
+            c.cache = cache_static;
+            
+            if(!cache.add_static(c.location))
+            {
+                std::cout << c.path << " not added to cache or config" << std::endl;
+                
+                continue;
+            }
+        }
         
         m_routes[line[1]] = c;
     }

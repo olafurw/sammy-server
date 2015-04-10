@@ -5,12 +5,14 @@
 #include "libraries/json.hpp"
 #include "libraries/format.h"
 
+#include "utils.hpp"
+
 data_handler::data_handler()
 {
 
 }
 
-void data_handler::process(const request_parser& rp, const config_storage& cfg, std::string& data)
+void data_handler::process(const request_parser& rp, const config_storage& cfg, const cache_storage& cache, std::string& data)
 {
     config request_config;
     if(!cfg.get(rp.get_path(), request_config))
@@ -26,7 +28,7 @@ void data_handler::process(const request_parser& rp, const config_storage& cfg, 
     }
     
     if(request_config.type == type_static
-       && !process_static(rp, request_config, data))
+       && !process_static(rp, cache, request_config, data))
     {
         data = response_error();
         return;
@@ -40,8 +42,16 @@ void data_handler::process(const request_parser& rp, const config_storage& cfg, 
     }
 }
 
-bool data_handler::process_static(const request_parser& rp, const config& cfg, std::string& data)
+bool data_handler::process_static(const request_parser& rp, const cache_storage& cache, const config& cfg, std::string& data)
 {
+    if(cfg.cache == cache_method::cache_static && cache.is_cached(cfg.location))
+    {
+        const std::string file_data = cache.get_static(cfg.location);
+        data = response_200(file_data, cfg.mimetype);
+        
+        return true;
+    }
+    
     if(!utils::file_exists(cfg.location))
     {
         return false;
