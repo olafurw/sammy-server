@@ -6,13 +6,15 @@
 #include <string>
 #include <vector>
 
+#include "database_types.hpp"
+
 class database
 {
 public:
     database();
     
-    bool increment_button();
-    bool get_button_counter(unsigned int& out_counter);
+    bool insert_blog(const blog& b, int& id);
+    bool get_blog(const int id, blog& b);
 
 private:
     soci::session m_session;

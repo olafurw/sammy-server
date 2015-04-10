@@ -73,22 +73,7 @@ bool data_handler::process_json(const request_parser& rp, const config& cfg, std
         return false;
     }
     
-    database db;
-    if(!db.increment_button())
-    {
-        return false;
-    }
-    
-    unsigned int counter = 0;
-    if(!db.get_button_counter(counter))
-    {
-        return false;
-    }
-    
-    nlohmann::json reply_json;
-    reply_json["counter"] = counter;
-    
-    data = response_200(reply_json.dump(), cfg.mimetype);
+    data = response_error();
     
     return true;
 }

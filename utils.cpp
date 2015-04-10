@@ -25,6 +25,38 @@ std::string sha256(const std::string& data)
     return sha_string;
 }
 
+time_t file_modified(const std::string& filename)
+{
+    struct stat sb;
+    const int result = stat(filename.c_str(), &sb);
+    
+    if(result == -1)
+    {
+        return -1;
+    }
+    
+    return sb.st_mtime;
+}
+
+std::string current_time(const char* format)
+{
+    time_t rawtime = current_time();
+    tm* timeinfo = localtime(&rawtime);
+
+    char buffer[80];
+    strftime(buffer, 80, format, timeinfo);
+    
+    return std::string(buffer);
+}
+
+time_t current_time()
+{
+    time_t rawtime;
+    time(&rawtime);
+    
+    return rawtime;
+}
+
 std::string& ltrim(std::string& s)
 {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));

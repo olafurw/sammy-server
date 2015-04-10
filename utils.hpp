@@ -22,6 +22,10 @@ namespace utils
 {
     std::string sha256(const std::string& data);
 
+    time_t file_modified(const std::string& filename);
+    std::string current_time(const char* format);
+    time_t current_time();
+    
     // Trimming
     // http://stackoverflow.com/a/217605/22459
     // Evan Teran

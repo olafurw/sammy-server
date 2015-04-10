@@ -1,4 +1,5 @@
 #include "database.hpp"
+#include "utils.hpp"
 
 #include <iostream>
 
@@ -7,18 +8,21 @@ database::database()
 {
 }
 
-bool database::increment_button()
+bool database::insert_blog(const blog& b, int& id)
 {
-    m_session << "UPDATE button SET counter=counter+1 LIMIT 1;";
+    m_session << "INSERT INTO blog (title, body, created_date, modified_date, votes) VALUES (:title, :body, :created_date, :modified_date, :votes)",
+        soci::use(b);
+    
+    id = 0;
+    m_session << "SELECT LAST_INSERT_ID();", soci::into(id);
     
     return true;
 }
 
-bool database::get_button_counter(unsigned int& out_counter)
+bool database::get_blog(const int id, blog& b)
 {
-    soci::indicator ind;
-    out_counter = 0;
-    m_session << "SELECT counter FROM button LIMIT 1;", soci::into(out_counter, ind);
+    m_session << "SELECT id, body, created_date, modified_date, votes WHERE id = :id LIMIT 1;", 
+        soci::use(id), soci::into(b);
     
-    return ind == soci::indicator::i_ok;
+    return true;
 }
