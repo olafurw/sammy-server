@@ -4,6 +4,7 @@
 #include <soci/soci.h>
 
 #include <string>
+#include <memory>
 #include <vector>
 
 #include "database_types.hpp"
@@ -17,7 +18,7 @@ public:
     bool get_blog(const int id, blog& b);
 
 private:
-    soci::session m_session;
+    std::unique_ptr<soci::session> m_session;
 };
 
 #endif

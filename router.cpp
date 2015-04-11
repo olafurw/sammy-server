@@ -62,10 +62,12 @@ void run()
         {
             request_id++;
             request_parser rp{request_id, wrk.data};
+            
+            std::cout << rp.to_string() << std::endl;
+            
             if(rp.errors())
             {
                 close(wrk.sck);
-                std::cout << "[Router] Error: " << rp.error_text() << std::endl;
                 continue;
             }
             

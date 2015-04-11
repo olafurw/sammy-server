@@ -18,6 +18,9 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include "libraries/format.h"
+#include "libraries/json.hpp"
+
 namespace utils
 {
     std::string sha256(const std::string& data);

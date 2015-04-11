@@ -561,3 +561,32 @@ std::string request_parser::error_text() const
 {
     return m_error_text;
 }
+
+std::string request_parser::to_string() const
+{
+    nlohmann::json j;
+    
+    j["route_method"] = "unknown";
+    if(m_method == route_method::method_get)
+    {
+        j["route_method"] = "get";
+    }
+    else if(m_method == route_method::method_post)
+    {
+        j["route_method"] = "post";
+    }
+    
+    j["path"] = m_path;
+    j["host"] = m_host;
+    j["port"] = m_port;
+    j["id"] = m_identifier;
+    j["referer"] = m_referer;
+    j["data_requested"] = m_is_data_requested;
+    
+    if(m_error == 1)
+    {
+        j["error"] = m_error_text;
+    }
+    
+    return j.dump();
+}

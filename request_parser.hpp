@@ -25,6 +25,8 @@ public:
 
     bool errors() const;
     std::string error_text() const;
+    
+    std::string to_string() const;
 
 private:
     void parse_header();
