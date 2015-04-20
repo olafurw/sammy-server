@@ -2,16 +2,16 @@
 #define DATABASE_TYPES
 
 #include <soci/soci.h>
+#include <iostream>
 
-class id;
 struct blog
 {
-    int id;
+    unsigned int id;
     std::string title;
     std::string body;
-    int created_date;
-    int modified_date;
-    int votes;
+    unsigned int created_date;
+    unsigned int modified_date;
+    unsigned int votes;
 };
 
 namespace soci
@@ -21,12 +21,12 @@ template<> struct type_conversion<blog>
     typedef values base_type;
     static void from_base(values const& v, indicator /* ind */, blog& b)
     {
-        b.id = v.get<int>("id");
+        b.id = v.get<unsigned int>("id");
         b.title = v.get<std::string>("title");
         b.body = v.get<std::string>("body");
-        b.created_date = v.get<int>("created_date");
-        b.modified_date = v.get<int>("modified_date");
-        b.votes = v.get<int>("votes");
+        b.created_date = v.get<unsigned int>("created_date");
+        b.modified_date = v.get<unsigned int>("modified_date");
+        b.votes = v.get<unsigned int>("votes");
     }
     static void to_base(const blog& b, values& v, indicator& ind)
     {

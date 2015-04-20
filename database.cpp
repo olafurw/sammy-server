@@ -29,8 +29,14 @@ bool database::insert_blog(const blog& b, int& id)
 
 bool database::get_blog(const int id, blog& b)
 {
-    (*m_session) << "SELECT id, body, created_date, modified_date, votes WHERE id = :id LIMIT 1;", 
-        soci::use(id), soci::into(b);
+    soci::statement st = ((*m_session).prepare << "SELECT id, title, body, created_date, modified_date, votes FROM blog WHERE id = :id LIMIT 1;",
+                                soci::use(id), soci::into(b));
+    
+    st.execute();
+    if(!st.fetch())
+    {
+        return false;
+    }
     
     return true;
 }

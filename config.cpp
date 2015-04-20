@@ -23,6 +23,10 @@ config_storage::config_storage(const std::string& config_file, cache_storage& ca
         {
             c.type = type_json;
         }
+        else if(line[3] == "DYNAMIC")
+        {
+            c.type = type_dynamic;
+        }
         
         c.method = method_unknown;
         if(line[0] == "GET")
@@ -57,6 +61,23 @@ bool config_storage::get(const std::string& key, config& cfg) const
 {
     if(m_routes.count(key) == 0)
     {
+        for(const auto& route : m_routes)
+        {
+            const std::string& route_key = route.first;
+            const config& c = route.second;
+            if(c.type != type_dynamic)
+            {
+                continue;
+            }
+            
+            if(key.compare(0, route_key.size(), route_key) == 0)
+            {
+                cfg = c;
+
+                return true;
+            }
+        }
+        
         return false;
     }
     
@@ -64,3 +85,4 @@ bool config_storage::get(const std::string& key, config& cfg) const
     
     return true;
 }
+

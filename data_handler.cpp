@@ -1,7 +1,5 @@
 #include "data_handler.hpp"
 
-#include "database.hpp"
-
 #include "libraries/json.hpp"
 #include "libraries/format.h"
 
@@ -12,7 +10,7 @@ data_handler::data_handler()
 
 }
 
-void data_handler::process(const request_parser& rp, const config_storage& cfg, const cache_storage& cache, std::string& data)
+void data_handler::process(const request_parser& rp, database& db, const config_storage& cfg, const cache_storage& cache, const templates& tpl, std::string& data)
 {
     config request_config;
     if(!cfg.get(rp.get_path(), request_config))
@@ -29,6 +27,13 @@ void data_handler::process(const request_parser& rp, const config_storage& cfg, 
     
     if(request_config.type == type_static
        && !process_static(rp, cache, request_config, data))
+    {
+        data = response_error();
+        return;
+    }
+    
+    if(request_config.type == type_dynamic
+       && !process_dynamic(rp, db, request_config, tpl, data))
     {
         data = response_error();
         return;
@@ -71,6 +76,48 @@ bool data_handler::process_static(const request_parser& rp, const cache_storage&
     return true;
 }
 
+bool data_handler::process_dynamic(const request_parser& rp, database& db, const config& cfg, const templates& tpl, std::string& data)
+{
+    int jon = 0;
+    
+    const auto& path = rp.get_path();
+    const auto last_slash = path.find_last_of('/');
+    if(last_slash == std::string::npos)
+    {
+        return false;
+    }
+    
+    const auto id_str = path.substr(last_slash + 1, path.size());
+    if(id_str.empty())
+    {
+        return false;
+    }
+    
+    int id = 0;
+    if(!utils::string_to_int(id_str, id))
+    {
+        return false;
+    }
+    
+    std::string template_str;
+    if(!tpl.get("blog", template_str))
+    {
+        return false;
+    }
+    
+    blog b;
+    if(!db.get_blog(id, b))
+    {
+        return false;
+    }
+    
+    const std::string final_data = fmt::format(template_str, b.title, b.body);
+    
+    data = response_200(final_data, cfg.mimetype);
+    
+    return true;
+}
+
 bool data_handler::process_json(const request_parser& rp, const config& cfg, std::string& data)
 {
     nlohmann::json request_json;
@@ -83,9 +130,7 @@ bool data_handler::process_json(const request_parser& rp, const config& cfg, std
         return false;
     }
     
-    data = response_error();
-    
-    return true;
+    return false;
 }
 
 std::string data_handler::response_error()

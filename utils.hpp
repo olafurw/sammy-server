@@ -29,6 +29,8 @@ namespace utils
     std::string current_time(const char* format);
     time_t current_time();
     
+    bool string_to_int(const std::string& value, int& out_value);
+    
     // Trimming
     // http://stackoverflow.com/a/217605/22459
     // Evan Teran

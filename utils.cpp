@@ -57,6 +57,29 @@ time_t current_time()
     return rawtime;
 }
 
+bool string_to_int(const std::string& value, int& out_value)
+{
+    int id = 0;
+    try
+    {
+        id = stoi(value);
+        
+        const std::string tmp_check = std::to_string(id);
+        if(tmp_check != value)
+        {
+            return false;
+        }
+    }
+    catch(...)
+    {
+        return false;
+    }
+    
+    out_value = id;
+    
+    return true;
+}
+
 std::string& ltrim(std::string& s)
 {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
