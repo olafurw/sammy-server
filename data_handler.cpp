@@ -10,7 +10,7 @@ data_handler::data_handler()
 
 }
 
-void data_handler::process(const request_parser& rp, database& db, const config_storage& cfg, const cache_storage& cache, const templates& tpl, std::string& data)
+void data_handler::process(const request_parser& rp, const config_storage& cfg, const cache_storage& cache, const blog_storage& blogs, std::string& data)
 {
     config request_config;
     if(!cfg.get(rp.get_path(), request_config))
@@ -33,7 +33,7 @@ void data_handler::process(const request_parser& rp, database& db, const config_
     }
     
     if(request_config.type == type_dynamic
-       && !process_dynamic(rp, db, request_config, tpl, data))
+       && !process_dynamic(rp, request_config, blogs, data))
     {
         data = response_error();
         return;
@@ -76,7 +76,7 @@ bool data_handler::process_static(const request_parser& rp, const cache_storage&
     return true;
 }
 
-bool data_handler::process_dynamic(const request_parser& rp, database& db, const config& cfg, const templates& tpl, std::string& data)
+bool data_handler::process_dynamic(const request_parser& rp, const config& cfg, const blog_storage& blogs, std::string& data)
 {
     int jon = 0;
     
@@ -99,21 +99,13 @@ bool data_handler::process_dynamic(const request_parser& rp, database& db, const
         return false;
     }
     
-    std::string template_str;
-    if(!tpl.get("blog", template_str))
+    std::string blog;
+    if(!blogs.get_blog(id, blog))
     {
         return false;
     }
     
-    blog b;
-    if(!db.get_blog(id, b))
-    {
-        return false;
-    }
-    
-    const std::string final_data = fmt::format(template_str, b.title, b.body);
-    
-    data = response_200(final_data, cfg.mimetype);
+    data = response_200(blog, cfg.mimetype);
     
     return true;
 }

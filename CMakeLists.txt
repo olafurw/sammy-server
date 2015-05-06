@@ -10,10 +10,9 @@ set(LIBRARY_FILES
 set(SERVER_FILES
     utils.cpp
     sha256.cpp
-    templates.cpp
     cache_storage.cpp
+    blog_storage.cpp
     config.cpp
-    database.cpp
     listener.cpp
     router.cpp
     request_parser.cpp
@@ -26,9 +25,6 @@ add_executable(server ${SERVER_FILES} ${LIBRARY_FILES})
 set(LIBRARIES 
     pthread
     dl
-    soci_core
-    soci_mysql
-    /usr/lib64/mysql/libmysqlclient.so
 )
 
 target_link_libraries(server ${LIBRARIES})
