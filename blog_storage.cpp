@@ -4,6 +4,8 @@
 
 blog_storage::blog_storage(const std::string& blog_config)
 {
+    m_highest_id = 0;
+    
     const auto blog_files = utils::file_to_array(blog_config);
     if(blog_files.size() == 0)
     {
@@ -33,6 +35,11 @@ blog_storage::blog_storage(const std::string& blog_config)
         }
         
         m_blogs[blog_id] = blog_data;
+        
+        if(blog_id > m_highest_id)
+        {
+            m_highest_id = blog_id;
+        }
     }
 }
 
@@ -46,4 +53,9 @@ bool blog_storage::get_blog(const int id, std::string& blog) const
     blog = m_blogs.at(id);
     
     return true;
+}
+
+bool blog_storage::get_latest_blog(std::string& blog) const
+{
+    return get_blog(m_highest_id, blog);
 }
