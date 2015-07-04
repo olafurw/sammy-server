@@ -12,6 +12,7 @@ set(SERVER_FILES
     sha256.cpp
     cache_storage.cpp
     blog_storage.cpp
+    template_storage.cpp
     config.cpp
     listener.cpp
     router.cpp

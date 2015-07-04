@@ -9,6 +9,7 @@
 
 #include "cache_storage.hpp"
 #include "blog_storage.hpp"
+#include "template_storage.hpp"
 #include "config.hpp"
 #include "request_parser.hpp"
 #include "data_handler.hpp"
@@ -30,6 +31,7 @@ bool has_data = false;
 cache_storage cache;
 blog_storage blogs("/home/cznp-server/blog.cfg");
 config_storage cfg("/home/cznp-server/config.cfg", cache);
+template_storage tpl("/home/cznp-server/templates.cfg");
 
 void on_data(const int sck, const std::string& data)
 {
@@ -76,7 +78,7 @@ void run()
             std::string data;
             
             data_handler dh;
-            dh.process(rp, cfg, cache, blogs, data);
+            dh.process(rp, cfg, cache, tpl, blogs, data);
 
             write(wrk.sck, data.c_str(), data.size());
             close(wrk.sck);

@@ -12,6 +12,7 @@ enum route_type
     type_unknown,
     type_static,
     type_dynamic,
+    type_blog,
     type_json,
 };
 

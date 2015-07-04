@@ -10,7 +10,7 @@ data_handler::data_handler()
 
 }
 
-void data_handler::process(const request_parser& rp, const config_storage& cfg, const cache_storage& cache, const blog_storage& blogs, std::string& data)
+void data_handler::process(const request_parser& rp, const config_storage& cfg, const cache_storage& cache, const template_storage& tpl, const blog_storage& blogs, std::string& data)
 {
     config request_config;
     if(!cfg.get(rp.get_path(), request_config))
@@ -34,6 +34,13 @@ void data_handler::process(const request_parser& rp, const config_storage& cfg, 
     
     if(request_config.type == type_dynamic
        && !process_dynamic(rp, request_config, blogs, data))
+    {
+        data = response_error();
+        return;
+    }
+    
+    if(request_config.type == type_blog
+       && !process_blog(rp, request_config, tpl, blogs, data))
     {
         data = response_error();
         return;
@@ -76,10 +83,8 @@ bool data_handler::process_static(const request_parser& rp, const cache_storage&
     return true;
 }
 
-bool data_handler::process_dynamic(const request_parser& rp, const config& cfg, const blog_storage& blogs, std::string& data)
+bool data_handler::process_blog(const request_parser& rp, const config& cfg, const template_storage& tpl, const blog_storage& blogs, std::string& data)
 {
-    int jon = 0;
-    
     const auto& path = rp.get_path();
     const auto last_slash = path.find_last_of('/');
     if(last_slash == std::string::npos)
@@ -100,14 +105,26 @@ bool data_handler::process_dynamic(const request_parser& rp, const config& cfg, 
     }
     
     std::string blog;
-    if(!blogs.get_blog(id, blog))
+    std::string title;
+    if(!blogs.get_blog(id, blog, title))
     {
         return false;
     }
     
-    data = response_200(blog, cfg.mimetype);
+    std::string blog_template;
+    if(!tpl.get_template("blog", blog_template))
+    {
+        return false;
+    }
     
+    data = response_200(fmt::format(blog_template, title, blog), cfg.mimetype);
+
     return true;
+}
+
+bool data_handler::process_dynamic(const request_parser& rp, const config& cfg, const blog_storage& blogs, std::string& data)
+{
+    return false;
 }
 
 bool data_handler::process_json(const request_parser& rp, const config& cfg, std::string& data)

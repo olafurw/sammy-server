@@ -27,6 +27,10 @@ config_storage::config_storage(const std::string& config_file, cache_storage& ca
         {
             c.type = type_dynamic;
         }
+        else if(line[3] == "BLOG")
+        {
+            c.type = type_blog;
+        }
         
         c.method = method_unknown;
         if(line[0] == "GET")
@@ -65,7 +69,7 @@ bool config_storage::get(const std::string& key, config& cfg) const
         {
             const std::string& route_key = route.first;
             const config& c = route.second;
-            if(c.type != type_dynamic)
+            if(c.type != type_dynamic && c.type != type_blog)
             {
                 continue;
             }
