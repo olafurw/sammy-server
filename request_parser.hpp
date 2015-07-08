@@ -48,6 +48,7 @@ private:
     std::string m_identifier;
     std::string m_post_data;
     std::string m_referer;
+    std::string m_request;
     unsigned int m_port;
     time_t m_if_modified_since;
     std::map<std::string, std::string> m_cookies;

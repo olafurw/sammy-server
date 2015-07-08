@@ -7,10 +7,7 @@
 #include <string>
 #include <unistd.h>
 
-#include "cache_storage.hpp"
-#include "blog_storage.hpp"
-#include "template_storage.hpp"
-#include "config.hpp"
+#include "storage_handler.hpp"
 #include "request_parser.hpp"
 #include "data_handler.hpp"
 
@@ -28,10 +25,8 @@ std::vector<work_data> work;
 std::mutex mtx;
 std::condition_variable cv;
 bool has_data = false;
-cache_storage cache;
-blog_storage blogs("/home/cznp-server/blog.cfg");
-config_storage cfg("/home/cznp-server/config.cfg", cache);
-template_storage tpl("/home/cznp-server/templates.cfg");
+
+storage_handler storage("/home/cznp-server/");
 
 void on_data(const int sck, const std::string& data)
 {
@@ -67,7 +62,7 @@ void run()
             request_id++;
             request_parser rp{request_id, wrk.data};
             
-            std::cout << rp.to_string() << std::endl;
+            storage.logger.log(rp.get_identifier(), rp.to_string());
             
             if(rp.errors())
             {
@@ -77,8 +72,8 @@ void run()
             
             std::string data;
             
-            data_handler dh;
-            dh.process(rp, cfg, cache, tpl, blogs, data);
+            data_handler dh(&storage);
+            dh.process(rp, data);
 
             write(wrk.sck, data.c_str(), data.size());
             close(wrk.sck);

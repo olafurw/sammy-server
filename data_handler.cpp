@@ -5,87 +5,89 @@
 
 #include "utils.hpp"
 
-data_handler::data_handler()
+data_handler::data_handler(const storage_handler* storage)
+    : m_storage(storage)
 {
 
 }
 
-void data_handler::process(const request_parser& rp, const config_storage& cfg, const cache_storage& cache, const template_storage& tpl, const blog_storage& blogs, std::string& data)
+void data_handler::process(const request_parser& rp, std::string& data)
 {
-    config request_config;
-    if(!cfg.get(rp.get_path(), request_config))
+    m_request = &rp;
+    if(!m_storage->config.get(m_request->get_path(), m_request_config))
     {
         data = response_error();
         return;
     }
     
-    if(request_config.method != rp.get_method())
+    if(m_request_config.method != m_request->get_method())
     {
         data = response_error();
         return;
     }
     
-    if(request_config.type == type_static
-       && !process_static(rp, cache, request_config, data))
+    if(m_request_config.type == type_static
+       && !process_static(data))
     {
         data = response_error();
         return;
     }
     
-    if(request_config.type == type_dynamic
-       && !process_dynamic(rp, request_config, blogs, data))
+    if(m_request_config.type == type_dynamic
+       && !process_dynamic(data))
     {
         data = response_error();
         return;
     }
     
-    if(request_config.type == type_blog
-       && !process_blog(rp, request_config, tpl, blogs, data))
+    if(m_request_config.type == type_blog
+       && !process_blog(data))
     {
         data = response_error();
         return;
     }
     
-    if(request_config.type == type_json
-       && !process_json(rp, request_config, data))
+    if(m_request_config.type == type_json
+       && !process_json(data))
     {
         data = response_error();
         return;
     }
 }
 
-bool data_handler::process_static(const request_parser& rp, const cache_storage& cache, const config& cfg, std::string& data)
+bool data_handler::process_static(std::string& data)
 {
-    if(cfg.cache == cache_method::cache_static && cache.is_cached(cfg.location))
+    if(m_request_config.cache == cache_method::cache_static 
+       && m_storage->cache.is_cached(m_request_config.location))
     {
-        const std::string file_data = cache.get_static(cfg.location);
-        data = response_200(file_data, cfg.mimetype);
+        const std::string file_data = m_storage->cache.get_static(m_request_config.location);
+        data = response_200(file_data, m_request_config.mimetype);
         
         return true;
     }
     
-    if(!utils::file_exists(cfg.location))
+    if(!utils::file_exists(m_request_config.location))
     {
         return false;
     }
     
-    if(rp.is_data_requested())
+    if(m_request->is_data_requested())
     {
-        const std::string file_data = utils::file_to_string(cfg.location);
-        data = response_200(file_data, cfg.mimetype);
+        const std::string file_data = utils::file_to_string(m_request_config.location);
+        data = response_200(file_data, m_request_config.mimetype);
     }
     else
     {
-        const int file_size = utils::file_size(cfg.location);
-        data = response_200_head(file_size, cfg.mimetype);
+        const int file_size = utils::file_size(m_request_config.location);
+        data = response_200_head(file_size, m_request_config.mimetype);
     }
     
     return true;
 }
 
-bool data_handler::process_blog(const request_parser& rp, const config& cfg, const template_storage& tpl, const blog_storage& blogs, std::string& data)
+bool data_handler::process_blog(std::string& data)
 {
-    const auto& path = rp.get_path();
+    const auto& path = m_request->get_path();
     const auto last_slash = path.find_last_of('/');
     if(last_slash == std::string::npos)
     {
@@ -106,33 +108,33 @@ bool data_handler::process_blog(const request_parser& rp, const config& cfg, con
     
     std::string blog;
     std::string title;
-    if(!blogs.get_blog(id, blog, title))
+    if(!m_storage->blogs.get_blog(id, blog, title))
     {
         return false;
     }
     
     std::string blog_template;
-    if(!tpl.get_template("blog", blog_template))
+    if(!m_storage->tpl.get_template("blog", blog_template))
     {
         return false;
     }
     
-    data = response_200(fmt::format(blog_template, title, blog), cfg.mimetype);
+    data = response_200(fmt::format(blog_template, title, blog), m_request_config.mimetype);
 
     return true;
 }
 
-bool data_handler::process_dynamic(const request_parser& rp, const config& cfg, const blog_storage& blogs, std::string& data)
+bool data_handler::process_dynamic(std::string& data)
 {
     return false;
 }
 
-bool data_handler::process_json(const request_parser& rp, const config& cfg, std::string& data)
+bool data_handler::process_json(std::string& data)
 {
     nlohmann::json request_json;
     try
     {
-        request_json = nlohmann::json::parse(rp.get_post_data());
+        request_json = nlohmann::json::parse(m_request->get_post_data());
     }
     catch(...)
     {

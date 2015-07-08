@@ -2,20 +2,20 @@
 
 #include "utils.hpp"
 
-request_parser::request_parser(const int id, const std::string& r)
+request_parser::request_parser(const int id, const std::string& request)
 {
     m_error = 0;
     m_error_text = "";
 
+    m_request = request;
     m_method = route_method::method_unknown;
     m_is_data_requested = false;
     m_path = "";
     m_host = "";
-    m_identifier = "";
     m_if_modified_since = 0;
     m_port = 80;
 
-    m_request_lines = utils::split_string(r, '\n');
+    m_request_lines = utils::split_string(m_request, '\n');
     m_identifier = utils::sha256(std::to_string(id));
 
     if(m_request_lines.size() == 0)
@@ -583,10 +583,12 @@ std::string request_parser::to_string() const
     j["referer"] = m_referer;
     j["data_requested"] = m_is_data_requested;
     
-    if(m_error == 1)
+    if(errors())
     {
         j["error"] = m_error_text;
     }
+    
+    j["raw"] = m_request;
     
     return j.dump();
 }

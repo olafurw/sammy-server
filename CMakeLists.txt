@@ -10,6 +10,8 @@ set(LIBRARY_FILES
 set(SERVER_FILES
     utils.cpp
     sha256.cpp
+    storage_handler.cpp
+    request_logger.cpp
     cache_storage.cpp
     blog_storage.cpp
     template_storage.cpp
