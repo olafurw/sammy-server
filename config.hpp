@@ -13,6 +13,7 @@ enum route_type
     type_static,
     type_dynamic,
     type_blog,
+    type_blog_list,
     type_json,
 };
 

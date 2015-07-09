@@ -30,10 +30,12 @@ storage_handler storage("/home/cznp-server/");
 
 void on_data(const int sck, const std::string& data)
 {
-    std::lock_guard<std::mutex> lock(mtx);
+    mtx.lock();
     has_data = true;
     
-    work.emplace_back(work_data{ sck, data });
+    work.push_back(work_data{ sck, data });
+    
+    mtx.unlock();
 
     cv.notify_all();
 }
@@ -51,15 +53,16 @@ void run()
         {
             std::unique_lock<std::mutex> lock(mtx);
             cv.wait(lock, [&]{ return has_data; });
+            has_data = false;
             
             current_work.swap(work);
-            
-            has_data = false;
+            work.clear();
         }
         
         for(auto wrk : current_work)
         {
             request_id++;
+            
             request_parser rp{request_id, wrk.data};
             
             storage.logger.log(rp.get_identifier(), rp.to_string());
@@ -79,7 +82,7 @@ void run()
             close(wrk.sck);
         }
         
-        work.clear();
+        current_work.clear();
     }
 }
 

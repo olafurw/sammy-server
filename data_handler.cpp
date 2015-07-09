@@ -47,6 +47,13 @@ void data_handler::process(const request_parser& rp, std::string& data)
         return;
     }
     
+    if(m_request_config.type == type_blog_list
+       && !process_blog_list(data))
+    {
+        data = response_error();
+        return;
+    }
+    
     if(m_request_config.type == type_json
        && !process_json(data))
     {
@@ -106,9 +113,14 @@ bool data_handler::process_blog(std::string& data)
         return false;
     }
     
-    std::string blog;
-    std::string title;
-    if(!m_storage->blogs.get_blog(id, blog, title))
+    blog b;
+    if(!m_storage->blogs.get_blog(id, b))
+    {
+        return false;
+    }
+    
+    std::string blog_entry_template;
+    if(!m_storage->tpl.get_template("blog_entry", blog_entry_template))
     {
         return false;
     }
@@ -119,7 +131,46 @@ bool data_handler::process_blog(std::string& data)
         return false;
     }
     
-    data = response_200(fmt::format(blog_template, title, blog), m_request_config.mimetype);
+    const std::string blog_entry = fmt::format(blog_entry_template, b.id, b.title, b.date, b.body);
+    
+    data = response_200(fmt::format(blog_template, blog_entry), m_request_config.mimetype);
+
+    return true;
+}
+
+bool data_handler::process_blog_list(std::string& data)
+{
+    std::vector<blog> blogs;
+    if(!m_storage->blogs.get_blogs(blogs))
+    {
+        return false;
+    }
+    
+    if(blogs.empty())   
+    {
+        return false;
+    }
+    
+    std::string blog_entry_template;
+    if(!m_storage->tpl.get_template("blog_entry", blog_entry_template))
+    {
+        return false;
+    }
+    
+    std::string blog_template;
+    if(!m_storage->tpl.get_template("blog", blog_template))
+    {
+        return false;
+    }
+    
+    std::stringstream ss;
+    
+    for(const blog& b : blogs)
+    {
+        ss << fmt::format(blog_entry_template, b.id, b.title, b.date, b.body);
+    }
+    
+    data = response_200(fmt::format(blog_template, ss.str()), m_request_config.mimetype);
 
     return true;
 }

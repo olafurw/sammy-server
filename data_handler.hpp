@@ -2,6 +2,7 @@
 #define SERVER_DATA_HANDLER
 
 #include <string>
+#include <sstream>
 
 #include "storage_handler.hpp"
 #include "request_parser.hpp"
@@ -15,6 +16,7 @@ public:
 private:
     bool process_static(std::string& data);
     bool process_blog(std::string& data);
+    bool process_blog_list(std::string& data);
     bool process_dynamic(std::string& data);
     bool process_json(std::string& data);
     std::string response_error();

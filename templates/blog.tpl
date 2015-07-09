@@ -14,10 +14,7 @@
         <div id="title">
             <a href="/">CyborgZombieNinjaPirate</a>
         </div>
-        <div class="blog">
-            <h1>{0}</h1>
-            {1}
-        </div>
+        {0}
     </div>
     <script src="/js/js.js"></script>
 </body>

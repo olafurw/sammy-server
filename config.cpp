@@ -31,6 +31,10 @@ config_storage::config_storage(const std::string& config_file, cache_storage& ca
         {
             c.type = type_blog;
         }
+        else if(line[3] == "BLOG_LIST")
+        {
+            c.type = type_blog_list;
+        }
         
         c.method = method_unknown;
         if(line[0] == "GET")

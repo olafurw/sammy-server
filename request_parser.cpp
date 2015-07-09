@@ -18,7 +18,7 @@ request_parser::request_parser(const int id, const std::string& request)
     m_request_lines = utils::split_string(m_request, '\n');
     m_identifier = utils::sha256(std::to_string(id));
 
-    if(m_request_lines.size() == 0)
+    if(m_request_lines.size() == 0 || m_request.empty())
     {
         m_error = 1;
         m_error_text = "Request data empty.";
