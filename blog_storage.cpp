@@ -3,8 +3,14 @@
 #include "utils.hpp"
 
 blog_storage::blog_storage(const std::string& blog_config)
+    : m_blog_config(blog_config)
 {
-    const auto blog_files = utils::file_to_array(blog_config);
+    load();
+}
+
+void blog_storage::load()
+{
+    const auto blog_files = utils::file_to_array(m_blog_config);
     if(blog_files.size() == 0)
     {
         return;
@@ -47,6 +53,12 @@ blog_storage::blog_storage(const std::string& blog_config)
         
         m_blogs.emplace_back(b);
     }
+}
+
+void blog_storage::refresh()
+{
+    m_blogs.clear();
+    load();
 }
 
 bool blog_storage::get_blogs(std::vector<blog>& blogs) const

@@ -3,8 +3,14 @@
 #include "utils.hpp"
 
 template_storage::template_storage(const std::string& template_config)
+    : m_template_config(template_config)
 {
-    const auto template_file = utils::file_to_array(template_config);
+    load();
+}
+
+void template_storage::load()
+{
+    const auto template_file = utils::file_to_array(m_template_config);
     if(template_file.size() == 0)
     {
         return;
@@ -34,6 +40,12 @@ template_storage::template_storage(const std::string& template_config)
         
         m_templates[template_name] = template_data;
     }
+}
+
+void template_storage::refresh()
+{
+    m_templates.clear();
+    load();
 }
 
 bool template_storage::get_template(const std::string& name, std::string& tpl) const

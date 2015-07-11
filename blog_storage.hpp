@@ -24,9 +24,14 @@ public:
     bool get_blogs(std::vector<blog>& blogs, const int limit) const;
     bool get_blog(const int id, blog& out_blog) const;
     bool get_latest_blog(blog& out_blog) const;
+    void refresh();
+    
 private:
     
     std::vector<blog> m_blogs;
+    std::string m_blog_config;
+    
+    void load();
 };
 
 #endif

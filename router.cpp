@@ -82,6 +82,8 @@ void run()
             close(wrk.sck);
         }
         
+        storage.refresh();
+        
         current_work.clear();
     }
 }

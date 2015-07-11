@@ -3,8 +3,16 @@
 #include "utils.hpp"
 
 config_storage::config_storage(const std::string& config_file, cache_storage& cache)
+    : m_config_file(config_file)
 {
-    const auto lines = utils::file_to_array(config_file);
+    load(cache);
+}
+
+void config_storage::load(cache_storage& cache)
+{
+    cache.clear();
+    
+    const auto lines = utils::file_to_array(m_config_file);
     
     for(const auto& route : lines)
     {
@@ -63,6 +71,12 @@ config_storage::config_storage(const std::string& config_file, cache_storage& ca
         
         m_routes[line[1]] = c;
     }
+}
+
+void config_storage::refresh(cache_storage& cache)
+{
+    m_routes.clear();
+    load(cache);
 }
 
 bool config_storage::get(const std::string& key, config& cfg) const

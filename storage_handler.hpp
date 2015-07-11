@@ -11,6 +11,7 @@ class storage_handler
 {
 public:
     storage_handler(const std::string& path);
+    void refresh();
     
     request_logger logger;
     cache_storage cache;

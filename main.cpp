@@ -12,6 +12,7 @@ void on_data(const int sck, const std::string& data)
 int main()
 {
     listener l;
+    
     l.request_callback(on_data);
     std::thread listener_thread(&listener::start, l);
     std::thread router_thread(router::run);

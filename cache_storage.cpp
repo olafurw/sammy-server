@@ -38,3 +38,8 @@ std::string cache_storage::get_static(const std::string& location) const
     
     return m_cache.at(location);
 }
+
+void cache_storage::clear()
+{
+    m_cache.clear();
+}
