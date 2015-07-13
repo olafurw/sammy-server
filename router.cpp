@@ -5,11 +5,16 @@
 #include <condition_variable>
 #include <iostream>
 #include <string>
+#include <ctime>
+#include <chrono>
+#include <ratio>
 #include <unistd.h>
 
 #include "storage_handler.hpp"
 #include "request_parser.hpp"
 #include "data_handler.hpp"
+
+using namespace std::chrono;
 
 struct work_data
 {
@@ -25,6 +30,7 @@ std::vector<work_data> work;
 std::mutex mtx;
 std::condition_variable cv;
 bool has_data = false;
+steady_clock::time_point update_timer;
 
 storage_handler storage("/home/cznp-server/");
 
@@ -45,6 +51,7 @@ void run()
     std::cout << "[Router] Starting" << std::endl;
     
     std::vector<work_data> current_work;
+    update_timer = steady_clock::now();
     
     std::cout << "[Router] Started" << std::endl;
     
@@ -82,7 +89,14 @@ void run()
             close(wrk.sck);
         }
         
-        storage.refresh();
+        steady_clock::time_point new_update = steady_clock::now();
+        duration<double> diff = duration_cast<duration<double>>(new_update - update_timer);
+        if(diff.count() >= 1.0)
+        {
+            storage.refresh();
+            
+            update_timer = new_update;
+        }
         
         current_work.clear();
     }
