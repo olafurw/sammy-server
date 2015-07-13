@@ -27,39 +27,37 @@ void data_handler::process(const request_parser& rp, std::string& data)
     }
     
     if(m_request_config.type == type_static
-       && !process_static(data))
+       && process_static(data))
     {
-        data = response_error();
+        return;
+    }    
+    else if(m_request_config.type == type_dynamic
+       && process_dynamic(data))
+    {
+        return;
+    }
+    else if(m_request_config.type == type_blog
+       && process_blog(data))
+    {
+        return;
+    }
+    else if(m_request_config.type == type_blog_list
+       && process_blog_list(data))
+    {
+        return;
+    }
+    else if(m_request_config.type == type_template
+       && process_template(data))
+    {
+        return;
+    }
+    else if(m_request_config.type == type_json
+       && process_json(data))
+    {
         return;
     }
     
-    if(m_request_config.type == type_dynamic
-       && !process_dynamic(data))
-    {
-        data = response_error();
-        return;
-    }
-    
-    if(m_request_config.type == type_blog
-       && !process_blog(data))
-    {
-        data = response_error();
-        return;
-    }
-    
-    if(m_request_config.type == type_blog_list
-       && !process_blog_list(data))
-    {
-        data = response_error();
-        return;
-    }
-    
-    if(m_request_config.type == type_json
-       && !process_json(data))
-    {
-        data = response_error();
-        return;
-    }
+    data = response_error();
 }
 
 bool data_handler::process_static(std::string& data)
@@ -171,6 +169,26 @@ bool data_handler::process_blog_list(std::string& data)
     }
     
     data = response_200(fmt::format(blog_template, ss.str()), m_request_config.mimetype);
+
+    return true;
+}
+
+bool data_handler::process_template(std::string& data)
+{
+    std::string blog_template;
+    if(!m_storage->tpl.get_template("blog", blog_template))
+    {
+        return false;
+    }
+    
+    if(!utils::file_exists(m_request_config.location))
+    {
+        return false;
+    }
+    
+    const std::string content = utils::file_to_string(m_request_config.location);
+    
+    data = response_200(fmt::format(blog_template, content), m_request_config.mimetype);
 
     return true;
 }

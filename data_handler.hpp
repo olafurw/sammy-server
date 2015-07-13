@@ -17,6 +17,7 @@ private:
     bool process_static(std::string& data);
     bool process_blog(std::string& data);
     bool process_blog_list(std::string& data);
+    bool process_template(std::string& data);
     bool process_dynamic(std::string& data);
     bool process_json(std::string& data);
     std::string response_error();

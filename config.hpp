@@ -14,6 +14,7 @@ enum route_type
     type_dynamic,
     type_blog,
     type_blog_list,
+    type_template,
     type_json,
 };
 

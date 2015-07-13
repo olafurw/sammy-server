@@ -43,6 +43,10 @@ void config_storage::load(cache_storage& cache)
         {
             c.type = type_blog_list;
         }
+        else if(line[3] == "TEMPLATE")
+        {
+            c.type = type_template;
+        }
         
         c.method = method_unknown;
         if(line[0] == "GET")
