@@ -39,7 +39,7 @@ void listener::start()
     }
 }
 
-void listener::request_callback(std::function<void(const int, const std::string&)> cb)
+void listener::request_callback(std::function<void(const int, const std::string&, const std::string&)> cb)
 {
     m_cb = cb;
 }
@@ -53,7 +53,7 @@ void listener::handle_events()
     }
 }
 
-void listener::read_data(int sck, std::string& out_data)
+void listener::read_data(const int sck, std::string& out_data)
 {
     char buffer[m_read_size];
     memset(buffer, 0, m_read_size);
@@ -81,24 +81,27 @@ void listener::handle_event(const epoll_event& event)
             sockaddr_in cli_addr;
             socklen_t clilen = sizeof(cli_addr);
 
-            int newsockfd = accept(m_socket, (sockaddr*)&cli_addr, &clilen);
+            const int newsockfd = accept(m_socket, (sockaddr*)&cli_addr, &clilen);
             if(newsockfd == -1)
             {
                 break;
             }
-
+            
             set_epoll_interface(newsockfd);
+            m_socket_address[newsockfd] = cli_addr.sin_addr;
         }
         
         return;
     }
     
-    int newsockfd = event.data.fd;
+    const int newsockfd = event.data.fd;
     
     std::string data = "";
     read_data(newsockfd, data);
     
-    m_cb(newsockfd, data);
+    const std::string ip_address = inet_ntoa(m_socket_address[newsockfd]);
+    
+    m_cb(newsockfd, data, ip_address);
 }
 
 void listener::set_address_info()

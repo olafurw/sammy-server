@@ -4,6 +4,6 @@
 
 namespace router
 {
-    void on_data(const int sck, const std::string& data);
+    void on_data(const int sck, const std::string& data, const std::string& ip_address);
     void run();
 }

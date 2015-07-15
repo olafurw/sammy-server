@@ -32,7 +32,7 @@ public:
     
     void start();
     
-    void request_callback(std::function<void(const int, const std::string&)> cb);
+    void request_callback(std::function<void(const int, const std::string&, const std::string&)> cb);
 
 private:
     void handle_events();
@@ -60,8 +60,9 @@ private:
     int m_epoll;
     int m_connection_queue_size;
     int m_read_size;
+    std::map<int, in_addr> m_socket_address;
     
-    std::function<void(const int, const std::string&)> m_cb;
+    std::function<void(const int, const std::string&, const std::string&)> m_cb;
 };
 
 #endif

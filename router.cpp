@@ -20,6 +20,7 @@ struct work_data
 {
     int sck;
     std::string data;
+    std::string ip_address;
 };
 
 namespace router
@@ -34,12 +35,12 @@ steady_clock::time_point update_timer;
 
 storage_handler storage("/home/cznp-server/");
 
-void on_data(const int sck, const std::string& data)
+void on_data(const int sck, const std::string& data, const std::string& ip_address)
 {
     mtx.lock();
     has_data = true;
     
-    work.push_back(work_data{ sck, data });
+    work.push_back(work_data{ sck, data, ip_address });
     
     mtx.unlock();
 
@@ -72,6 +73,7 @@ void run()
             
             request_parser rp{request_id, wrk.data};
             
+            storage.logger.log(rp.get_identifier(), wrk.ip_address);
             storage.logger.log(rp.get_identifier(), rp.to_string());
             
             if(rp.errors())
@@ -89,6 +91,8 @@ void run()
             close(wrk.sck);
         }
         
+        current_work.clear();
+        
         steady_clock::time_point new_update = steady_clock::now();
         duration<double> diff = duration_cast<duration<double>>(new_update - update_timer);
         if(diff.count() >= 1.0)
@@ -97,8 +101,6 @@ void run()
             
             update_timer = new_update;
         }
-        
-        current_work.clear();
     }
 }
 

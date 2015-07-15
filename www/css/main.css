@@ -74,3 +74,7 @@ div.blog div.blog_body {
 div.blog div.blog_body p {
     padding-bottom: 20px;
 }
+
+div.blog div.blog_body div {
+    margin-bottom: 20px;
+}

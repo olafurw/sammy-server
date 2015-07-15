@@ -5,9 +5,9 @@
 #include "listener.hpp"
 #include "router.hpp"
 
-void on_data(const int sck, const std::string& data)
+void on_data(const int sck, const std::string& data, const std::string& ip_address)
 {
-    router::on_data(sck, data);
+    router::on_data(sck, data, ip_address);
 }
 int main()
 {
