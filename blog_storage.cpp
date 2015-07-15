@@ -10,45 +10,43 @@ blog_storage::blog_storage(const std::string& blog_config)
 
 void blog_storage::load()
 {
-    const auto blog_files = utils::file_to_array(m_blog_config);
-    if(blog_files.size() == 0)
+    const auto blog_config = utils::file_to_string(m_blog_config);
+    if(blog_config.empty())
     {
         return;
     }
     
-    for(const auto& blog_line : blog_files)
+    nlohmann::json blog_json;
+    try
     {
-        const auto blog_split = utils::split_string(blog_line, ' ', true);
-        if(blog_split.size() < 4)
+        blog_json = nlohmann::json::parse(blog_config);
+    }
+    catch(...)
+    {
+        return;
+    }
+    
+    for(const auto blog_entry : blog_json)
+    {
+        const int blog_id = blog_entry["id"];
+        const std::string blog_title = blog_entry["title"];
+        const std::string blog_date = blog_entry["date"];
+        const std::string blog_path = blog_entry["path"];
+        if(!utils::file_exists(blog_path))
         {
             continue;
         }
         
-        const int blog_id = std::stoi(blog_split[0]);
-        const std::string blog_filename = blog_split[1];
-        const std::string blog_date = blog_split[2];
-        
-        if(!utils::file_exists(blog_filename))
+        const std::string blog_data = utils::file_to_string(blog_path);
+        if(blog_data.empty())
         {
             continue;
-        }
-        
-        const std::string blog_data = utils::file_to_string(blog_filename);
-        if(blog_data.size() == 0)
-        {
-            continue;
-        }
-        
-        std::stringstream ss;
-        for(int i = 3; i < blog_split.size(); ++i)
-        {
-           ss << blog_split[i] << ' ';
         }
         
         blog b;
         b.body = blog_data;
         b.date = blog_date;
-        b.title = ss.str();
+        b.title = blog_title;
         b.id = blog_id;
         
         m_blogs.emplace_back(b);
