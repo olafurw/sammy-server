@@ -54,6 +54,8 @@ namespace utils
 
     std::vector<std::string> file_to_array(const std::string& filename, char token = '\n');
     void write_to_file(const std::string& filename, const std::string& content);
+
+    std::string current_working_directory();
 }
 
 #endif

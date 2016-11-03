@@ -2,8 +2,9 @@
 
 #include "utils.hpp"
 
-blog_storage::blog_storage(const std::string& blog_config)
-    : m_blog_config(blog_config)
+blog_storage::blog_storage(const std::string& path)
+    : m_path(path)
+    , m_blog_config(path + "blog.cfg")
 {
     load();
 }
@@ -32,12 +33,12 @@ void blog_storage::load()
         const std::string blog_title = blog_entry["title"];
         const std::string blog_date = blog_entry["date"];
         const std::string blog_path = blog_entry["path"];
-        if(!utils::file_exists(blog_path))
+        if(!utils::file_exists(m_path + blog_path))
         {
             continue;
         }
         
-        const std::string blog_data = utils::file_to_string(blog_path);
+        const std::string blog_data = utils::file_to_string(m_path + blog_path);
         if(blog_data.empty())
         {
             continue;

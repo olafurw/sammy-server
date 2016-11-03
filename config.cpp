@@ -2,8 +2,9 @@
 
 #include "utils.hpp"
 
-config_storage::config_storage(const std::string& config_file, cache_storage& cache)
-    : m_config_file(config_file)
+config_storage::config_storage(const std::string& path, cache_storage& cache)
+    : m_path(path)
+    , m_config_file(path + "config.cfg")
 {
     load(cache);
 }
@@ -65,7 +66,7 @@ void config_storage::load(cache_storage& cache)
         {
             c.cache = cache_static;
             
-            if(!cache.add_static(c.location))
+            if(!cache.add_static(m_path + c.location))
             {
                 std::cout << c.path << " not added to cache or config" << std::endl;
                 

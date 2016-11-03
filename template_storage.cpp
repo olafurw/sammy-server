@@ -2,8 +2,9 @@
 
 #include "utils.hpp"
 
-template_storage::template_storage(const std::string& template_config)
-    : m_template_config(template_config)
+template_storage::template_storage(const std::string& path)
+    : m_path(path)
+    , m_template_config(path + "templates.cfg")
 {
     load();
 }
@@ -27,12 +28,12 @@ void template_storage::load()
         const std::string& template_name = tpl_split[0];
         const std::string& template_path = tpl_split[1];
         
-        if(!utils::file_exists(template_path))
+        if(!utils::file_exists(m_path + template_path))
         {
             continue;
         }
         
-        const std::string template_data = utils::file_to_string(template_path);
+        const std::string template_data = utils::file_to_string(m_path + template_path);
         if(template_data.size() == 0)
         {
             continue;

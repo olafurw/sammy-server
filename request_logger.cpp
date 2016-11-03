@@ -2,7 +2,8 @@
 #include "utils.hpp"
 
 request_logger::request_logger(const std::string& directory)
-    : m_directory(directory), m_file(directory + "server.log", std::ios::out | std::ios::app)
+    : m_directory(directory + "logs/")
+    , m_file(directory + "logs/" + "server.log", std::ios::out | std::ios::app)
 {
 }
 

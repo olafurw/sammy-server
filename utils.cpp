@@ -195,4 +195,17 @@ void write_to_file(const std::string& filename, const std::string& content)
     out.close();
 }
 
+std::string current_working_directory()
+{
+    static const int cwd_size = 1024;
+    char cwd[cwd_size];
+
+    if(getcwd(cwd, cwd_size) == nullptr)
+    {
+        return "";
+    }
+
+    return std::string(cwd);
+}
+
 }

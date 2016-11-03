@@ -45,13 +45,14 @@ public:
 class config_storage
 {
 public:
-    config_storage(const std::string& config_file, cache_storage& cache);
+    config_storage(const std::string& path, cache_storage& cache);
     
     bool get(const std::string& key, config& cfg) const;
     void refresh(cache_storage& cache);
     
 private:
     std::map<std::string, config> m_routes;
+    std::string m_path;
     std::string m_config_file;
     
     void load(cache_storage& cache);

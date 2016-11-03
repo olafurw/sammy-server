@@ -18,7 +18,7 @@ public:
 class blog_storage
 {
 public:
-    blog_storage(const std::string& blog_config);
+    blog_storage(const std::string& path);
     
     bool get_blogs(std::vector<blog>& blogs) const;
     bool get_blogs(std::vector<blog>& blogs, const int limit) const;
@@ -29,6 +29,7 @@ public:
 private:
     
     std::vector<blog> m_blogs;
+    std::string m_path;
     std::string m_blog_config;
     
     void load();
