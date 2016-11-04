@@ -181,12 +181,12 @@ bool data_handler::process_template(std::string& data)
         return false;
     }
     
-    if(!utils::file_exists(m_request_config.location))
+    if(!utils::file_exists(m_request_config.path))
     {
         return false;
     }
     
-    const std::string content = utils::file_to_string(m_request_config.location);
+    const std::string content = utils::file_to_string(m_request_config.path);
     
     data = response_200(fmt::format(blog_template, content), m_request_config.mimetype);
 
