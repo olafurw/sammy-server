@@ -33,7 +33,7 @@ void config_storage::load(cache_storage& cache)
     {
         config c;
         c.location = config_entry["route"].get<std::string>();
-        c.path = config_entry["path"].get<std::string>();
+        c.path = m_path + config_entry["path"].get<std::string>();
         
         const std::string type = config_entry["type"];
         
@@ -84,7 +84,7 @@ void config_storage::load(cache_storage& cache)
         {
             c.cache = cache_static;
             
-            if(!cache.add_static(m_path + c.location))
+            if(!cache.add_static(c.path))
             {
                 std::cout << c.path << " not added to cache or config" << std::endl;
                 

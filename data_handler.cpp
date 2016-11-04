@@ -63,27 +63,27 @@ void data_handler::process(const request_parser& rp, std::string& data)
 bool data_handler::process_static(std::string& data)
 {
     if(m_request_config.cache == cache_method::cache_static 
-       && m_storage->cache.is_cached(m_request_config.location))
+       && m_storage->cache.is_cached(m_request_config.path))
     {
-        const std::string file_data = m_storage->cache.get_static(m_request_config.location);
+        const std::string file_data = m_storage->cache.get_static(m_request_config.path);
         data = response_200(file_data, m_request_config.mimetype);
         
         return true;
     }
     
-    if(!utils::file_exists(m_request_config.location))
+    if(!utils::file_exists(m_request_config.path))
     {
         return false;
     }
     
     if(m_request->is_data_requested())
     {
-        const std::string file_data = utils::file_to_string(m_request_config.location);
+        const std::string file_data = utils::file_to_string(m_request_config.path);
         data = response_200(file_data, m_request_config.mimetype);
     }
     else
     {
-        const int file_size = utils::file_size(m_request_config.location);
+        const int file_size = utils::file_size(m_request_config.path);
         data = response_200_head(file_size, m_request_config.mimetype);
     }
     
