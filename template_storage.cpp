@@ -11,22 +11,26 @@ template_storage::template_storage(const std::string& path)
 
 void template_storage::load()
 {
-    const auto template_file = utils::file_to_array(m_template_config);
-    if(template_file.size() == 0)
+    const auto template_string = utils::file_to_string(m_template_config);
+    if(template_string.empty())
     {
         return;
     }
     
-    for(const auto& tpl : template_file)
+    nlohmann::json template_json;
+    try
     {
-        const auto tpl_split = utils::split_string(tpl, ' ', true);
-        if(tpl_split.size() != 2)
-        {
-            continue;
-        }
-        
-        const std::string& template_name = tpl_split[0];
-        const std::string& template_path = tpl_split[1];
+        template_json = nlohmann::json::parse(template_string);
+    }
+    catch(...)
+    {
+        return;
+    }
+    
+    for(const auto template_entry : template_json)
+    {        
+        const std::string& template_name = template_entry["name"];
+        const std::string& template_path = template_entry["path"];
         
         if(!utils::file_exists(m_path + template_path))
         {
