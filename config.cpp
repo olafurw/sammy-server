@@ -13,56 +13,74 @@ void config_storage::load(cache_storage& cache)
 {
     cache.clear();
     
-    const auto lines = utils::file_to_array(m_config_file);
-    
-    for(const auto& route : lines)
+    const auto config_string = utils::file_to_string(m_config_file);
+    if(config_string.empty())
     {
-        const auto line = utils::split_string(route, ' ');
-
+        return;
+    }
+    
+    nlohmann::json config_json;
+    try
+    {
+        config_json = nlohmann::json::parse(config_string);
+    }
+    catch(...)
+    {
+        return;
+    }
+    
+    for(const auto config_entry : config_json)
+    {
         config c;
-        c.location = line[2];
-        c.path = line[1];
+        c.location = config_entry["route"].get<std::string>();
+        c.path = config_entry["path"].get<std::string>();
+        
+        const std::string type = config_entry["type"];
         
         c.type = type_unknown;
-        if(line[3] == "STATIC")
+        if(type == "STATIC")
         {
             c.type = type_static;
         }
-        else if(line[3] == "JSON")
+        else if(type == "JSON")
         {
             c.type = type_json;
         }
-        else if(line[3] == "DYNAMIC")
+        else if(type == "DYNAMIC")
         {
             c.type = type_dynamic;
         }
-        else if(line[3] == "BLOG")
+        else if(type == "BLOG")
         {
             c.type = type_blog;
         }
-        else if(line[3] == "BLOG_LIST")
+        else if(type == "BLOG_LIST")
         {
             c.type = type_blog_list;
         }
-        else if(line[3] == "TEMPLATE")
+        else if(type == "TEMPLATE")
         {
             c.type = type_template;
         }
         
+        const std::string method = config_entry["method"];
+        
         c.method = method_unknown;
-        if(line[0] == "GET")
+        if(method == "GET")
         {
             c.method = method_get;
         }
-        else if(line[0] == "POST")
+        else if(method == "POST")
         {
             c.method = method_post;
         }
         
-        c.mimetype = line[4];
+        c.mimetype = config_entry["mimetype"].get<std::string>();
+        
+        const std::string cache_type = config_entry["cache"];
         
         c.cache = cache_never;
-        if(line[5] == "CACHE-STATIC")
+        if(cache_type == "CACHE-STATIC")
         {
             c.cache = cache_static;
             
@@ -74,7 +92,7 @@ void config_storage::load(cache_storage& cache)
             }
         }
         
-        m_routes[line[1]] = c;
+        m_routes[c.location] = c;
     }
 }
 
