@@ -9,12 +9,9 @@ cache_storage::cache_storage()
 
 bool cache_storage::add_static(const std::string& location)
 {
-    if(is_cached(location))
-    {
-        return false;
-    }
-    
-    if(!utils::file_exists(location))
+    if(is_cached(location)
+        || !utils::file_exists(location)
+    )
     {
         return false;
     }

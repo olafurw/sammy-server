@@ -14,18 +14,13 @@ data_handler::data_handler(const storage_handler* storage)
 void data_handler::process(const request_parser& rp, std::string& data)
 {
     m_request = &rp;
-    if(!m_storage->config.get(m_request->get_path(), m_request_config))
+    if(!m_storage->config.get(m_request->get_path(), m_request_config)
+        || m_request_config.method != m_request->get_method())
     {
         data = response_error();
         return;
     }
-    
-    if(m_request_config.method != m_request->get_method())
-    {
-        data = response_error();
-        return;
-    }
-    
+
     if(m_request_config.type == type_static
        && process_static(data))
     {
@@ -139,12 +134,8 @@ bool data_handler::process_blog(std::string& data)
 bool data_handler::process_blog_list(std::string& data)
 {
     std::vector<blog> blogs;
-    if(!m_storage->blogs.get_blogs(blogs))
-    {
-        return false;
-    }
-    
-    if(blogs.empty())   
+    if(!m_storage->blogs.get_blogs(blogs)
+        || blogs.empty())
     {
         return false;
     }
@@ -176,12 +167,8 @@ bool data_handler::process_blog_list(std::string& data)
 bool data_handler::process_template(std::string& data)
 {
     std::string blog_template;
-    if(!m_storage->tpl.get_template("blog", blog_template))
-    {
-        return false;
-    }
-    
-    if(!utils::file_exists(m_request_config.path))
+    if(!m_storage->tpl.get_template("blog", blog_template)
+        || !utils::file_exists(m_request_config.path))
     {
         return false;
     }
@@ -215,7 +202,7 @@ bool data_handler::process_json(std::string& data)
 
 std::string data_handler::response_error()
 {
-    return R"header(HTTP/1.0 404 Not Found
+    static const std::string error = R"header(HTTP/1.0 404 Not Found
 Server: sammy v0.5
 MIME-version: 1.0
 Content-type: text/plain
@@ -225,12 +212,14 @@ Content-Length: 28
 Requested content not found!
 
 )header";
+    
+    return error;
 }
 
 std::string data_handler::response_200(const std::string& input, const std::string& content_type)
 {
     //Set-Cookie: LOL_SESSION=abc123; Expires=Wed, 16 Nov 2015 12:34:56 GMT
-    std::string header = R"header(HTTP/1.0 200 OK
+    static const std::string header = R"header(HTTP/1.0 200 OK
 Server: sammy v0.5
 MIME-version: 1.0
 Content-type: {0}
@@ -247,7 +236,7 @@ Content-Length: {1}
 std::string data_handler::response_200_head(const int input_size, const std::string& content_type)
 {
     //Set-Cookie: LOL_SESSION=abc123; Expires=Wed, 16 Nov 2015 12:34:56 GMT
-    std::string header = R"header(HTTP/1.0 200 OK
+    static const std::string header = R"header(HTTP/1.0 200 OK
 Server: sammy v0.5
 MIME-version: 1.0
 Content-type: {0}

@@ -16,12 +16,12 @@ router::~router()
 
 void router::on_data(const int sck, const std::string& data, const std::string& ip_address)
 {
-    m_mtx.lock();
-    m_has_data = true;
+    {
+        std::unique_lock<std::mutex> lock(m_mtx);
     
-    m_work.push_back(work_data{ sck, data, ip_address });
-    
-    m_mtx.unlock();
+        m_has_data = true;
+        m_work.push_back(work_data{ sck, data, ip_address });
+    }
 
     m_cv.notify_all();
 }

@@ -1,19 +1,17 @@
 #include "listener.hpp"
 
 listener::listener()
+    : m_id(1)
+    , m_address_info(nullptr)
+    , m_port("80")
+    , m_connection_queue_size(30)
+    , m_read_size(8 * 1024)
+    , m_socket(-1)
 {
-    m_id = 1;
-    m_address_info = nullptr;
-    m_epoll_events = nullptr;
-    m_port = "80";
-    m_connection_queue_size = 30;
-    m_read_size = 8 * 1024;
-    m_socket = -1;
 }
 
 listener::~listener()
 {
-    delete [] m_epoll_events;
 }
 
 void listener::start()
@@ -46,7 +44,7 @@ void listener::request_callback(std::function<void(const int, const std::string&
 
 void listener::handle_events()
 {
-    const int event_count = epoll_wait(m_epoll, m_epoll_events, m_connection_queue_size, -1);
+    const int event_count = epoll_wait(m_epoll, &m_epoll_events[0], m_connection_queue_size, -1);
     for(int i = 0; i < event_count; ++i)
     {
         handle_event(m_epoll_events[i]);
@@ -159,7 +157,7 @@ void listener::create_epoll()
 
     set_epoll_interface(m_socket);
 
-    m_epoll_events = new epoll_event[m_connection_queue_size];
+    m_epoll_events.resize(m_connection_queue_size);
 }
 
 void listener::set_epoll_interface(int socket)

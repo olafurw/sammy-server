@@ -54,7 +54,7 @@ private:
     
     std::string m_port;
     addrinfo* m_address_info;
-    epoll_event* m_epoll_events;
+    std::vector<epoll_event> m_epoll_events;
     int m_id;
     int m_socket;
     int m_epoll;

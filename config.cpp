@@ -104,30 +104,30 @@ void config_storage::refresh(cache_storage& cache)
 
 bool config_storage::get(const std::string& key, config& cfg) const
 {
-    if(m_routes.count(key) == 0)
+    if(m_routes.count(key) > 0)
     {
-        for(const auto& route : m_routes)
-        {
-            const std::string& route_key = route.first;
-            const config& c = route.second;
-            if(c.type != type_dynamic && c.type != type_blog)
-            {
-                continue;
-            }
-            
-            if(key.compare(0, route_key.size(), route_key) == 0)
-            {
-                cfg = c;
-
-                return true;
-            }
-        }
+        cfg = m_routes.at(key);
         
-        return false;
+        return true;
     }
     
-    cfg = m_routes.at(key);
+    for(const auto& route : m_routes)
+    {
+        const std::string& route_key = route.first;
+        const config& c = route.second;
+        if(c.type != type_dynamic && c.type != type_blog)
+        {
+            continue;
+        }
+        
+        if(key.compare(0, route_key.size(), route_key) == 0)
+        {
+            cfg = c;
+
+            return true;
+        }
+    }
     
-    return true;
+    return false;
 }
 
