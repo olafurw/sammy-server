@@ -11,7 +11,7 @@
 class request_parser
 {
 public:
-    request_parser(const int id, const std::string& request);
+    request_parser(const int id, const std::string& request, const std::string& ip_address);
 
     std::string get_host() const;
     std::string get_path() const;
@@ -43,6 +43,7 @@ private:
 
     route_method m_method;
     bool m_is_data_requested;
+    std::string m_ip_address;
     std::string m_path;
     std::string m_host;
     std::string m_identifier;

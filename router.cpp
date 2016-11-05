@@ -50,10 +50,9 @@ void router::run()
         {
             m_request_id++;
             
-            request_parser rp{m_request_id, wrk.data};
+            request_parser rp{m_request_id, wrk.data, wrk.ip_address};
             
-            m_storage.logger.log(rp.get_identifier(), wrk.ip_address);
-            m_storage.logger.log(rp.get_identifier(), rp.to_string());
+            m_storage.logger.log(rp.to_string());
             
             if(rp.errors())
             {

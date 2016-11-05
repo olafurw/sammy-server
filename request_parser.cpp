@@ -2,7 +2,7 @@
 
 #include "utils.hpp"
 
-request_parser::request_parser(const int id, const std::string& request)
+request_parser::request_parser(const int id, const std::string& request, const std::string& ip_address)
 {
     m_error = 0;
     m_error_text = "";
@@ -14,6 +14,8 @@ request_parser::request_parser(const int id, const std::string& request)
     m_host = "";
     m_if_modified_since = 0;
     m_port = 80;
+    
+    m_ip_address = ip_address;
 
     m_request_lines = utils::split_string(m_request, '\n');
     m_identifier = utils::sha256(std::to_string(id));
@@ -582,6 +584,7 @@ std::string request_parser::to_string() const
     j["id"] = m_identifier;
     j["referer"] = m_referer;
     j["data_requested"] = m_is_data_requested;
+    j["ip_address"] = m_ip_address;
     
     if(errors())
     {

@@ -9,7 +9,7 @@ class request_logger
 public:
     request_logger(const std::string& directory);
     ~request_logger();
-    void log(const std::string& request_id, const std::string& data);
+    void log(const std::string& data);
     
 private:
     

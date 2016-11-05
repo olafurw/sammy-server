@@ -12,9 +12,8 @@ request_logger::~request_logger()
     m_file.close();
 }
 
-void request_logger::log(const std::string& request_id, const std::string& data)
+void request_logger::log(const std::string& data)
 {
-    m_file << request_id << " ";
     m_file << data << "\n";
     m_file.flush();
 }
