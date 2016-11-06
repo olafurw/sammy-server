@@ -1,80 +1,86 @@
-body {
-    background-color: #FFFFFF;
+body, html {
+    font-family: Tahoma, Verdana, Segoe, sans-serif;
 }
 
-div#top {
-    background-color: #2E4272;
-    height: 10px;
+#content {
+    margin-bottom: 50px;
 }
 
-div#title {
-    background-color: #667599;
-    height: 60px;
-    font-size: 48px;
+#content #title {
+    height: 50px;
+    text-align: center;
+    margin-top: 50px;
+}
+
+#content #title a {
+    font-size: 24px;
     font-weight: bold;
-    padding-top: 5px;
+    text-decoration: none;
+    color: #1155cc;
+}
+
+#content #menu {
+    text-align: center;
+    padding-bottom: 25px;
+}
+
+#content #menu ul li {
+    display: inline;
+    padding-right: 15px;
     padding-left: 15px;
 }
 
-div#title a {
-    font-family: 'Lato', sans-serif;
+#content #menu ul li a {
+    font-weight: bold;
     text-decoration: none;
-    font-weight: 400;
-    color: #000B23;
+    color: #1155cc;
 }
 
-div#menu {
-    font-family: 'Lato', sans-serif;
-    font-size: 20px;
-    background-color: #C5C7CC;
-    height: 30px;
-    padding-top: 10px;
+#content #body {
+    width: 720px;
+    margin: 0 auto;
 }
 
-div#menu ul li {
-    display: inline;
-    padding-left: 20px;
+#content #body {
+    line-height: 30px;
 }
 
-div#menu ul li a {
-    text-decoration: none;
-    color: #000B23;   
-}
-
-div#body {
-    padding-left: 20px;
-    padding-top: 15px;
-}
-
-div.blog h1 {
-    font-family: 'Lato', sans-serif;
-    font-size: 32px;
-    font-weight: 700;
-    padding-bottom: 5px;
-}
-
-div.blog h1 a {
-    text-decoration: none;
-    color: #000B23;
-}
-
-div.blog h2 {
-    font-family: 'Lato', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
+#content #body h1 {
+    font-size: 24px;
     padding-bottom: 15px;
+    padding-top: 5px;
+    font-weight: bold;
 }
 
-div.blog div.blog_body {
-    font-family: 'Inconsolata', sans-serif, monospace;
-    font-size: 20px;
-    padding-right: 40px;
+#content #body h1 a {
+    text-decoration: none;
+    color: #1155cc;
 }
 
-div.blog div.blog_body p {
-    padding-bottom: 20px;
+#content #body h2 {
+    font-size: 14px;
+    color: #999999;
 }
 
-div.blog div.blog_body div {
-    margin-bottom: 20px;
+#content #body .blog_body {
+    padding-bottom: 25px;
+}
+
+#content #body .blog_border {
+    height: 3px;
+    width: 120px;
+    border-bottom: 3px dashed #999999;
+    margin-bottom: 25px;
+}
+
+#content #body .blog_body .code-box {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-family: monospace;
+    font-size: 16px;
+    color: #ffffff;
+    white-space: pre;
+    background-color: #364968;
+    padding: 10px;
+    border-radius: 15px;
 }

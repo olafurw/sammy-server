@@ -1,41 +1,9 @@
-<p>Test</p>
+<p>Here is some example code:</p>
 
-<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #000080; font-weight: bold">bool</span> blog_storage::get_blog(<span style="color: #000080; font-weight: bold">const</span> <span style="color: #000080; font-weight: bold">int</span> id, blog&amp; out_blog) <span style="color: #000080; font-weight: bold">const</span>
+<div class="code-box">int main()
 {
-    <span style="color: #000080; font-weight: bold">if</span>(m_blogs.empty() || id &lt;= <span style="color: #0000FF">0</span>)
-    {
-        <span style="color: #000080; font-weight: bold">return</span> false;
-    }
-    
-    <span style="color: #000080; font-weight: bold">for</span>(<span style="color: #000080; font-weight: bold">const</span> blog&amp; b : m_blogs)
-    {
-        <span style="color: #000080; font-weight: bold">if</span>(b.id == id)
-        {
-            out_blog = b;
-            <span style="color: #000080; font-weight: bold">return</span> true;
-        }
-    }
-    
-    <span style="color: #000080; font-weight: bold">return</span> false;
+    return 0;
 }
-</pre></td></tr></table></div>
+</div>
 
-
-<p>Test 2</p>
+<p>Here is some example code:</p>

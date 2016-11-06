@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>CyborgZombieNinjaPirate</title>
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
     
     <link rel="stylesheet" href="/css/reset.css" />
     <link rel="stylesheet" href="/css/main.css" />
@@ -20,7 +18,7 @@
         </div>
         <div id="menu">
             <ul>
-                <li><a href="/">HOME</a></li>
+                <li><a href="/">BLOG</a></li>
                 <li><a href="/about">ABOUT</a></li>
                 <li><a href="/projects">PROJECTS</a></li>
             </ul>
