@@ -5,11 +5,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -g -O0")
 
 set(LIBRARY_FILES
     libraries/format.cc
+    libraries/sha256.cpp
 )
 
 set(SERVER_FILES
     utils.cpp
-    sha256.cpp
     command_line.cpp
     storage_handler.cpp
     request_logger.cpp

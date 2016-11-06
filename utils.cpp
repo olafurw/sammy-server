@@ -1,6 +1,6 @@
 #include "utils.hpp"
 
-#include "sha256.hpp"
+#include "libraries/sha256.hpp"
 
 namespace utils
 {

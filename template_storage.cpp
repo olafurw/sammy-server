@@ -4,7 +4,7 @@
 
 template_storage::template_storage(const std::string& path)
     : m_path(path)
-    , m_template_config(path + "templates.cfg")
+    , m_template_config(path + "templates/templates.cfg")
 {
     load();
 }

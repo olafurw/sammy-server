@@ -141,7 +141,7 @@ bool data_handler::process_blog_list(std::string& data)
     }
     
     std::string blog_entry_template;
-    if(!m_storage->tpl.get_template("blog_entry", blog_entry_template))
+    if(!m_storage->tpl.get_template("blog_frontpage_entry", blog_entry_template))
     {
         return false;
     }
@@ -156,7 +156,7 @@ bool data_handler::process_blog_list(std::string& data)
     
     for(const blog& b : blogs)
     {
-        ss << fmt::format(blog_entry_template, b.id, b.title, b.date, b.body);
+        ss << fmt::format(blog_entry_template, b.id, b.title, b.date);
     }
     
     data = response_200(fmt::format(blog_template, ss.str()), m_request_config.mimetype);

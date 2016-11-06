@@ -4,7 +4,7 @@
 
 blog_storage::blog_storage(const std::string& path)
     : m_path(path)
-    , m_blog_config(path + "blog.cfg")
+    , m_blog_config(path + "blog/blog.cfg")
 {
     load();
 }
