@@ -20,11 +20,15 @@
             <ul>
                 <li><a href="/">BLOG</a></li>
                 <li><a href="/about">ABOUT</a></li>
-                <li><a href="/projects">PROJECTS</a></li>
             </ul>
         </div>
         <div id="body">
             {0}
+        </div>
+        <div id="footer">
+            Ólafur Waage
+            | Powered by <a href="https://github.com/olafurw/sammy-server">Sammy</a>
+            | © All rights reserved
         </div>
     </div>
     <script src="/js/js.js"></script>

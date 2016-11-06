@@ -1,1 +1,17 @@
-<p>About added soon</p>
+<h1><a href="/about">About</a></h1>
+
+<img src="/img/profile.jpg" class="image-float" />
+
+<p>Ólafur Waage, born in Reykjavík Iceland in 1982. Always been the guy that felt most at home in front of a keyboard.
+Started programming as a hobby at a young age and it continued to be a hobby until he was tasked to make a website and a blog for his
+gaming clan, this was in late 1999 and he never turned back.</p>
+
+<p>Currently working for Ubisoft Massive in Sweden.</p>
+
+<p>Main programming interests are with C++ and Linux so blog posts will mostly reflect that, they will never be directly work related.</p>
+
+<p>For a more detailed CV click <a href="https://stackoverflow.com/cv/waage">here.</a></p>
+
+<p>Social media links include: <a href="https://twitter.com/olafurw">Twitter</a> / <a href="https://www.instagram.com/olafurw/">Instagram</a></p>
+
+<div class="clear"></div>

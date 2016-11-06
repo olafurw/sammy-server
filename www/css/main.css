@@ -52,7 +52,7 @@ body, html {
     font-weight: bold;
 }
 
-#content #body h1 a {
+a {
     text-decoration: none;
     color: #1155cc;
 }
@@ -83,4 +83,20 @@ body, html {
     background-color: #364968;
     padding: 10px;
     border-radius: 15px;
+}
+
+#content #footer {
+    padding-top: 25px;
+    text-align: center;
+    font-size: 12px;
+}
+
+.image-float {
+    float: left;
+    padding-right: 15px;
+    padding-bottom: 10px;
+}
+
+.clear {
+    clear: both;
 }
