@@ -24,6 +24,7 @@ void blog_storage::load()
     }
     catch(...)
     {
+        std::cout << "[Error] Parsing JSON for blog configuration file." << std::endl;
         return;
     }
     
@@ -44,11 +45,18 @@ void blog_storage::load()
             continue;
         }
         
+        std::vector<std::string> tags;
+        for(const auto& tag : blog_entry["tags"])
+        {
+            tags.emplace_back(clean_tag(tag.get<std::string>()));
+        }
+        
         blog b;
         b.body = blog_data;
         b.date = blog_date;
         b.title = blog_title;
         b.id = blog_id;
+        b.tags = tags;
         
         m_blogs.emplace_back(b);
     }
@@ -127,4 +135,17 @@ bool blog_storage::get_latest_blog(blog& out_blog) const
     out_blog = m_blogs.back();
     
     return true;
+}
+
+std::string blog_storage::clean_tag(const std::string& tag)
+{
+    std::string to_clean = tag;
+    
+    utils::trim(to_clean);
+    utils::replace(to_clean, "\r", "");
+    utils::replace(to_clean, "\n", "");
+    utils::replace(to_clean, "\"", "");
+    utils::replace(to_clean, "\\", "");
+    
+    return to_clean;
 }

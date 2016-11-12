@@ -20,6 +20,7 @@ private:
     bool process_template(std::string& data);
     bool process_dynamic(std::string& data);
     bool process_json(std::string& data);
+    std::string parse_blog_tags(const std::vector<std::string>& tags);
     std::string response_error();
     std::string response_200(const std::string& input, const std::string& content_type);
     std::string response_200_head(const int input_size, const std::string& content_type);

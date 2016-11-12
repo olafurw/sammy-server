@@ -13,6 +13,7 @@ public:
     std::string title;
     std::string date;
     std::string body;
+    std::vector<std::string> tags;
 };
 
 class blog_storage
@@ -32,6 +33,7 @@ private:
     std::string m_path;
     std::string m_blog_config;
     
+    std::string clean_tag(const std::string& tag);
     void load();
 };
 

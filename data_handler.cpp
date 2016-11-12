@@ -118,13 +118,15 @@ bool data_handler::process_blog(std::string& data)
         return false;
     }
     
+    const std::string blog_tags = parse_blog_tags(b.tags);
+    
     std::string blog_template;
     if(!m_storage->tpl.get_template("blog", blog_template))
     {
         return false;
     }
     
-    const std::string blog_entry = fmt::format(blog_entry_template, b.id, b.title, b.date, b.body);
+    const std::string blog_entry = fmt::format(blog_entry_template, b.id, b.title, b.date, b.body, blog_tags);
     
     data = response_200(fmt::format(blog_template, blog_entry), m_request_config.mimetype);
 
@@ -156,7 +158,9 @@ bool data_handler::process_blog_list(std::string& data)
     
     for(const blog& b : blogs)
     {
-        ss << fmt::format(blog_entry_template, b.id, b.title, b.date);
+        const std::string blog_tags = parse_blog_tags(b.tags);
+        
+        ss << fmt::format(blog_entry_template, b.id, b.title, b.date, blog_tags);
     }
     
     data = response_200(fmt::format(blog_template, ss.str()), m_request_config.mimetype);
@@ -183,6 +187,29 @@ bool data_handler::process_template(std::string& data)
 bool data_handler::process_dynamic(std::string& data)
 {
     return false;
+}
+
+std::string data_handler::parse_blog_tags(const std::vector<std::string>& tags)
+{
+    if(tags.empty())
+    {
+        return "";
+    }
+    
+    std::string blog_tag;
+    if(!m_storage->tpl.get_template("blog_tag", blog_tag))
+    {
+        return "";
+    }
+    
+    std::stringstream ss;
+    
+    for(const auto tag : tags)
+    {
+        ss << fmt::format(blog_tag, tag);
+    }
+    
+    return ss.str();
 }
 
 bool data_handler::process_json(std::string& data)

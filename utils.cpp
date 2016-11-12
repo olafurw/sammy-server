@@ -135,6 +135,15 @@ std::vector<std::string> split_string(const std::string& str, const char token, 
     return segments;
 }
 
+void replace(std::string& s, const std::string& f, const std::string& r)
+{
+    for(std::string::size_type i = 0; (i = s.find(f, i)) != std::string::npos;)
+    {
+        s.replace(i, f.length(), r);
+        i += r.length();
+    }
+}
+
 bool starts_with(const std::string& key, const std::string& target)
 {
     const int key_length = key.size();

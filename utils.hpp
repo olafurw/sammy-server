@@ -40,6 +40,8 @@ namespace utils
     std::string ltrim(const std::string& s);
     std::string rtrim(const std::string& s);
     std::string trim(const std::string& s);
+    
+    void replace(std::string& s, const std::string& f, const std::string& r);
 
     std::vector<std::string> split_string(const std::string& str, const char token, const bool skip_empty = false);
 
