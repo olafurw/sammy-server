@@ -7,16 +7,16 @@ body, html {
 }
 
 #content #title {
-    height: 50px;
+    height: 200px;
     text-align: center;
-    margin-top: 50px;
+    margin-top: 10px;
 }
 
 #content #title a {
     font-size: 24px;
     font-weight: bold;
     text-decoration: none;
-    color: #1155cc;
+    color: #0060af;
 }
 
 #content #menu {
@@ -33,7 +33,7 @@ body, html {
 #content #menu ul li a {
     font-weight: bold;
     text-decoration: none;
-    color: #1155cc;
+    color: #0060af;
 }
 
 #content #body {
@@ -54,11 +54,12 @@ body, html {
 
 a {
     text-decoration: none;
-    color: #1155cc;
+    color: #0060af;
 }
 
 #content #body h2 {
     font-size: 14px;
+    font-weight: bold;
     color: #999999;
 }
 
@@ -69,7 +70,7 @@ a {
 #content #body .blog_border {
     height: 3px;
     width: 120px;
-    border-bottom: 3px dashed #999999;
+    border-bottom: 4px dashed #999999;
     margin-bottom: 15px;
 }
 
@@ -80,7 +81,7 @@ a {
     font-size: 16px;
     color: #ffffff;
     white-space: pre;
-    background-color: #364968;
+    background-color: #0060af;
     padding: 10px;
     border-radius: 15px;
 }

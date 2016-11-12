@@ -14,7 +14,7 @@
     <div id="content">
         <div id="top"></div>
         <div id="title">
-            <a href="/">CyborgZombieNinjaPirate</a>
+            <a href="/"><img src="/img/logo.png" alt="CyborgZombieNinjaPirate" /></a>
         </div>
         <div id="menu">
             <ul>
